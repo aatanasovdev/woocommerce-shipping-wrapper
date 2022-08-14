@@ -1,7 +1,7 @@
 {
     "name": "aleksandaratanasov/woocommerce-shipping-wrapper",
     "description": "A basic WooCommerce wrapper for creating shipping methods.",
-    "license": "GNU GENERAL PUBLIC LICENSE",
+    "license": "GPL-3.0-or-later",
     "autoload": {
         "psr-4": {
             "WC_Shipping_Wrapper\\": "src/"

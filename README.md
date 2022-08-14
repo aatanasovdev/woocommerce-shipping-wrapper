@@ -27,10 +27,10 @@ include_once( 'vendor/autoload.php' );
 use WC_Shipping_Wrapper\Shipping;
 
 add_action('woocommerce_shipping_init', function() {
-	$basic_shipping = new Shipping(
-		'test-shipping-method',
-		'Test Shipping Method'
-	);
+    $basic_shipping = new Shipping(
+        'test-shipping-method',
+        'Test Shipping Method'
+    );
 });
 ```
 
@@ -38,8 +38,8 @@ add_action('woocommerce_shipping_init', function() {
 
 ```php
 $shipping = new Shipping(
-	'shipping-method-id',
-	'Shipping Method Title'
+    'shipping-method-id',
+    'Shipping Method Title'
 );
 ```
 

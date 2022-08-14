@@ -105,7 +105,7 @@ class Shipping_Method extends \WC_Shipping_Method {
     }   
 
     /**
-     * Add the shipping method to the WordPress dashboard.
+     * Add the shipping method to the other WooCommerce shipping methods.
      *
      * @access public
      * @return array

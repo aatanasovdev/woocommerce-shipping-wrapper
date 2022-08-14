@@ -10,7 +10,7 @@ use WC_Shipping_Wrapper\Dependencies_Check;
  */
 class Shipping {
     /**
-     * Shipping Method class.
+     * Shipping Method instance.
      *
      * @var object
      */

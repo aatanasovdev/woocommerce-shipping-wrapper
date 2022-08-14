@@ -16,7 +16,7 @@ Steps:
  1. Install the package to your WordPress project;
  2. Register your shipping method inside an appropriate WordPress hook (all plugins must be loaded). For example: `woocommerce_shipping_init`:
  3. Add the shipping method to a shipping zone through the WordPress dashboard;
- 4. Set the title, the description, and the fee of your shipping method using the Shipping Settings. These settings are empty by default, and they must be configured. It is because WooCommerce creates a new instance for each method added to a shipping zone behind the scenes.
+ 4. Set the title, the description, and the fee of your shipping method using the shipping settings. These settings are empty by default, and they must be configured. It is because WooCommerce creates a new instance for each method added to a shipping zone behind the scenes.
 
 
 ## Setup
@@ -48,7 +48,7 @@ $shipping = new Shipping(
 | Option            | Type     | Required | Description                                |
 | ----------------- | -------- | -------- | ------------------------------------------ |
 | `name`            | `string` | yes      | The unique ID of your shipping method      |
-| `method_title`    | `string` | yes      | The default title of your shipping method  |
+| `title`           | `string` | yes      | The default title of your shipping method  |
 
 ## Admin options
 

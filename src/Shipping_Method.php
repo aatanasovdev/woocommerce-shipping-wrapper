@@ -152,4 +152,26 @@ class Shipping_Method extends \WC_Shipping_Method {
     public function get_description() {
         return $this->get_option( 'description' );
     }    
+
+    /**
+     * Set the id of the shipping method.
+     *
+     * @param string $id Method Name.
+     * @access public
+     * @return string
+     */
+    public function set_id( $id ) {
+        return $this->id = $id;
+    } 
+
+    /**
+     * Set the method title of the shipping method.
+     *
+     * @param string $title Method Title.
+     * @access public
+     * @return string
+     */
+    public function set_method_title( $title ) {
+        return $this->method_title = $title;
+    }            
 }

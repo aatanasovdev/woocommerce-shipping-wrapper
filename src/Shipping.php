@@ -23,9 +23,9 @@ class Shipping {
      * @return void
      */
     public function __construct( $name, $title ) {
-        $this->method               = new Shipping_Method();
-        $this->method->id           = $name;
-        $this->method->method_title = $title;
+        $this->method = new Shipping_Method();
+        $this->method->set_method_title( $title );
+        $this->method->set_id( $name );
 
         $this->init();      
     }

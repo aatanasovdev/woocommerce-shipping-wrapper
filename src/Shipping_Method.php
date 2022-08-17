@@ -6,6 +6,26 @@ namespace WC_Shipping_Wrapper;
  * Register a custom shipping method.
  */
 class Shipping_Method extends \WC_Shipping_Method {
+    /**
+     * Default name value.
+     *
+     * @var object
+     */
+    static $default_id;
+
+    /**
+     * Default title value.
+     *
+     * @var object
+     */
+    static $default_title;
+
+    /**
+     * Default description value.
+     *
+     * @var object
+     */
+    static $default_description;    
 
     /**
      * Constructor for shipping methods.
@@ -13,50 +33,48 @@ class Shipping_Method extends \WC_Shipping_Method {
      * @access public
      * @return void
      */
-    public function __construct( $instance_id = 0 ) {
+    public function __construct( $instance_id = 0 ) {        
         $this->instance_id = absint( $instance_id );
         $this->init();
     }
 
     /**
-     * Initialize the settings of the shipping method.
+     * Initialize the instance.
      *
      * @access protected
      * @return void
      */
     protected function init() {
-        $this->set_form_fields(); 
         $this->set_default_settings();
-        $this->set_hooks();
-    }
-
-    /**
-     * Register the required WC_Shipping_Method hooks.
-     *
-     * @access protected
-     * @return void
-     */
-    protected function set_hooks() {
-        add_filter( 'woocommerce_shipping_methods', array( $this, 'add_shipping_method' ) );
-        add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
+        $this->set_form_fields(); 
     }
 
     /**
      * Set the default settings of the shipping method.
      *
-     * @access protected
+     * @access public
      * @return void
      */
-    protected function set_default_settings() {  
+    public function set_default_settings() {  
         $this->supports = array(
             'shipping-zones',
             'instance-settings'
         );      
-        $this->enabled            = $this->get_option( 'enabled' );
-        $this->title              = $this->get_title();
-        $this->method_title       = $this->get_title();
-        $this->description        = $this->get_description();  
-        $this->method_description = $this->get_description();  
+
+        $this->id                 = $this->get_default_id();
+        $this->method_title       = $this->get_default_title();
+        $this->method_description = $this->get_default_description(); 
+    }
+
+    /**
+     * Set the option values of the shipping method.
+     *
+     * @access public
+     * @return void
+     */
+    public function set_options() {
+        $this->enabled = $this->get_option( 'enabled' );
+        $this->title   = $this->get_option( 'title' );
     }
 
     /**
@@ -77,7 +95,7 @@ class Shipping_Method extends \WC_Shipping_Method {
                 'title'       => __( 'Method Title' ),
                 'type'        => 'text',
                 'description' => __( 'This controls the title which the user sees during checkout.' ),
-                'default'     => '',
+                'default'     => $this->get_default_title(),
                 'desc_tip'    => true
             ),
             'cost' => array(
@@ -86,15 +104,12 @@ class Shipping_Method extends \WC_Shipping_Method {
                 'description' => __( 'This controls the cost of this method.' ),
                 'default'     => 0,
                 'desc_tip'    => true
-            ),            
-            'description' => array(
-                'title'       => __( 'Method Description' ),
-                'type'        => 'text',
-                'description' => __( 'This controls the description which the user sees during checkout.' ),
-                'default'     => '',
-                'desc_tip'    => true
-            ),           
+            )          
         ); 
+
+        $this->set_options();
+
+        add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
     }
 
     /**
@@ -106,79 +121,71 @@ class Shipping_Method extends \WC_Shipping_Method {
     public function calculate_shipping( $package = array() ) {
         $this->add_rate( array(
             'id'    => $this->id . $this->instance_id,
-            'label' => $this->get_title(),
-            'cost'  => $this->get_cost(),
+            'label' => $this->title,
+            'cost'  => $this->get_option( 'cost' )
         ) );
-    }   
-
-    /**
-     * Add the shipping method to the other WooCommerce shipping methods.
-     *
-     * @access public
-     * @return array
-     */
-    public function add_shipping_method( $methods ) {
-        $methods[$this->id] = $this; 
-        return $methods;
     }
 
     /**
-     * Get the title of the shipping method.
+     * Get the default name of the shipping method.
      *
      * @access public
      * @return string
      */
-    public function get_title() {
-        $title = $this->method_title;
-
-        $option_title = $this->get_option( 'title' );
-
-        if( $option_title ) {
-            $title = $option_title;
-        }
-
-        return $title;
+    public function get_default_id() {
+        return self::$default_id;
     }
 
     /**
-     * Get the cost of the shipping method.
+     * Get the default title of the shipping method.
      *
      * @access public
      * @return string
      */
-    public function get_cost() {
-        return $this->get_option( 'cost' );
-    }
-
-    /**
-     * Get the description of the shipping method.
-     *
-     * @access public
-     * @return string
-     */
-    public function get_description() {
-        return $this->get_option( 'description' );
+    public function get_default_title() {
+        return self::$default_title;
     }    
 
     /**
-     * Set the id of the shipping method.
+     * Get the default description of the shipping method.
+     *
+     * @access public
+     * @return string
+     */
+    public function get_default_description() {
+        return self::$default_description;
+    }    
+
+    /**
+     * Set the name of the shipping method.
      *
      * @param string $id Method Name.
      * @access public
-     * @return string
+     * @return void
      */
-    public function set_id( $id ) {
-        return $this->id = $id;
+    public function set_default_id( $id ) {
+        self::$default_id = $id;
     } 
 
     /**
-     * Set the method title of the shipping method.
+     * Set the default title of the shipping method.
      *
-     * @param string $title Method Title.
+     * @param string $title Default Title.
      * @access public
-     * @return string
+     * @return void
      */
-    public function set_method_title( $title ) {
-        return $this->method_title = $title;
-    }            
+    public function set_default_title( $title ) {
+        self::$default_title = $title;
+    }
+
+    /**
+     * Set the default description of the shipping method.
+     *
+     * @param string $description Default Description.
+     * @access public
+     * @return void
+     */
+    public function set_default_description( $description ) {
+        self::$default_description = $description;
+    }
 }

@@ -29,7 +29,7 @@ use WC_Shipping_Wrapper\Shipping;
 add_action('woocommerce_shipping_init', function() {
     $basic_shipping = new Shipping(
         'shipping-method-id', // Shipping method name
-        'Shipping Method Title' // Shipping method title
+        'Shipping Method Title', // Shipping method title
         'Shipping Method Description' // Shipping method description
     );
 });
